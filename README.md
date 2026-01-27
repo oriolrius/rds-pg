@@ -83,7 +83,7 @@ aws cloudformation wait stack-delete-complete \
 Create a `.env` file (get your IP from `curl -s https://ip.joor.net`):
 
 ```
-MY_IP=185.160.171.64
+MY_IP=X.X.X.X
 DB_HOST=<DBEndpoint>
 DB_PORT=5432
 DB_USER=postgres
