@@ -9,8 +9,3 @@ dependencies = [
     "python-dotenv>=1.2.1",
 ]
 
-[project.scripts]
-demo = "marimo:cli"
-
-[tool.uv.scripts]
-notebook = "marimo edit --host 0.0.0.0 --port 47500 demo.py"

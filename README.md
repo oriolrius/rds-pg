@@ -103,7 +103,7 @@ Then run:
 Interactive notebook with PostgreSQL examples:
 
 ```bash
-uv run notebook
+uv run marimo edit --host 0.0.0.0 --port 47500 demo.py
 ```
 
 Opens at http://localhost:47500
