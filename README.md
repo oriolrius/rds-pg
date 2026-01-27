@@ -8,7 +8,7 @@ This CloudFormation template deploys a PostgreSQL RDS instance with a pre-config
 - **4 Subnets** across 2 Availability Zones (2 public, 2 private)
 - **Internet Gateway** with routing for public subnets
 - **Security Groups** for database, application, and Jupyter access
-- **RDS PostgreSQL 15.15** instance (`db.m5.xlarge`, 20GB encrypted storage)
+- **RDS PostgreSQL 15.15** instance (`db.t3.micro`, 20GB encrypted storage)
 - **EC2 Jupyter Instance** (`t3a.micro`, Ubuntu 24.04) with:
   - Python 3.13 via [uv](https://docs.astral.sh/uv/)
   - JupyterLab pre-configured with RDS credentials
@@ -227,7 +227,7 @@ source .env && mkdir -p ~/work/.database && echo "{\"rds\":{\"name\":\"rds\",\"d
 | Property | Value |
 |----------|-------|
 | Engine | PostgreSQL 15.15 |
-| Instance Class | db.m5.xlarge |
+| Instance Class | db.t3.micro |
 | Storage | 20GB gp2 (encrypted) |
 | Multi-AZ | No |
 | Backup Retention | 7 days |

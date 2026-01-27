@@ -56,7 +56,7 @@ Resources:
     Type: AWS::RDS::DBInstance
     Properties:
       DBInstanceIdentifier: !Sub '${AWS::StackName}-postgres'
-      DBInstanceClass: db.m5.xlarge
+      DBInstanceClass: db.t3.micro
       Engine: postgres
       EngineVersion: '15.15'
       AllocatedStorage: 20
@@ -246,7 +246,7 @@ Resources:
           cat > /home/jupyter/notebooks/pyproject.toml << 'PROJEOF'
           [project]
           name = "rds-pg"
-          version = "0.6.0"
+          version = "0.6.1"
           description = "PostgreSQL RDS CloudFormation template with SQL notebook"
           requires-python = ">=3.13"
           dependencies = [

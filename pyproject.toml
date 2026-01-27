@@ -1,6 +1,6 @@
 [project]
 name = "rds-pg"
-version = "0.6.0"
+version = "0.6.1"
 description = "PostgreSQL RDS CloudFormation template with SQL notebook"
 requires-python = ">=3.13"
 dependencies = [
