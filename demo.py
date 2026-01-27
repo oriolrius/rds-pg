@@ -128,6 +128,57 @@ def _(cur, mo):
 @app.cell
 def _(mo):
     mo.md("""
+    ## SQL Cells with Polars
+
+    Load PostgreSQL data into a Polars dataframe, then use SQL cells to query it via DuckDB.
+    """)
+    return
+
+
+@app.cell
+def _(conn):
+    import polars as pl
+
+    # Load PostgreSQL table into Polars dataframe
+    users_df = pl.read_database(
+        query="SELECT * FROM users ORDER BY id",
+        connection=conn
+    )
+    users_df
+    return pl, users_df
+
+
+@app.cell
+def _(mo, users_df):
+    # Now you can use SQL cells on the dataframe
+    result = mo.sql(
+        """
+        SELECT name, email
+        FROM users_df
+        WHERE name LIKE '%Smith%'
+        """
+    )
+    return result,
+
+
+@app.cell
+def _(mo, users_df):
+    # Another SQL example - aggregation
+    stats = mo.sql(
+        """
+        SELECT
+            COUNT(*) as total_users,
+            MIN(created_at) as first_user,
+            MAX(created_at) as last_user
+        FROM users_df
+        """
+    )
+    return stats,
+
+
+@app.cell
+def _(mo):
+    mo.md("""
     ## Cleanup
 
     Run the cell below to drop the `users` table when done.
