@@ -9,4 +9,5 @@ dependencies = [
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.1",
     "toml>=0.10.2",
+    "jupyterlab-sql-explorer>=0.2.1",
 ]
