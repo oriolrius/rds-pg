@@ -1,12 +1,12 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Minimal PostgreSQL RDS instance'
+Description: 'PostgreSQL RDS with Jupyter EC2 instance for SQL practice'
 
 Parameters:
   DBUsername:
     Type: String
     Default: postgres
     Description: Database master username
-  
+
   DBPassword:
     Type: String
     NoEcho: true
@@ -15,7 +15,18 @@ Parameters:
 
   MyIP:
     Type: String
-    Description: Your IP address for database access
+    Description: Your IP address for database access (e.g., 203.0.113.25)
+
+  KeyPairName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: EC2 Key Pair for SSH access to the Jupyter instance
+
+  JupyterToken:
+    Type: String
+    NoEcho: true
+    MinLength: 8
+    Default: jupyter-sql-practice
+    Description: Token/password to access Jupyter notebook
 
 Resources:
   DBSubnetGroup:
@@ -139,13 +150,254 @@ Resources:
       GroupDescription: Security group for applications connecting to RDS
       VpcId: !Ref VPC
 
+  # ============================================
+  # Jupyter EC2 Instance Resources
+  # ============================================
+
+  JupyterSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Security group for Jupyter EC2 instance
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Sub '${MyIP}/32'
+          Description: SSH access from your IP
+        - IpProtocol: tcp
+          FromPort: 8888
+          ToPort: 8888
+          CidrIp: !Sub '${MyIP}/32'
+          Description: Jupyter access from your IP
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-jupyter-sg'
+
+  JupyterInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-jupyter-role'
+
+  JupyterInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref JupyterInstanceRole
+
+  JupyterInstance:
+    Type: AWS::EC2::Instance
+    DependsOn: PostgreSQLDB
+    Properties:
+      InstanceType: t3a.micro
+      ImageId: !Sub '{{resolve:ssm:/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id}}'
+      KeyName: !Ref KeyPairName
+      IamInstanceProfile: !Ref JupyterInstanceProfile
+      SubnetId: !Ref PublicSubnet1
+      SecurityGroupIds:
+        - !Ref JupyterSecurityGroup
+        - !Ref AppSecurityGroup
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-jupyter'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -e
+
+          # Update Ubuntu 24.04
+          apt-get update
+          apt-get upgrade -y
+          apt-get install -y curl git postgresql-client
+
+          # Create jupyter user
+          useradd -m -s /bin/bash jupyter
+
+          # Create working directory with correct permissions
+          mkdir -p /home/jupyter/notebooks
+          chmod 755 /home/jupyter/notebooks
+
+          # Create .env file with database credentials
+          cat > /home/jupyter/notebooks/.env << 'ENVEOF'
+          DB_HOST=${PostgreSQLDB.Endpoint.Address}
+          DB_PORT=${PostgreSQLDB.Endpoint.Port}
+          DB_NAME=mydb
+          DB_USER=${DBUsername}
+          DB_PASSWORD=${DBPassword}
+          DB_ENGINE=postgres
+          DB_VERSION=15.15
+          ENVEOF
+
+          # Create .python-version
+          echo "3.13" > /home/jupyter/notebooks/.python-version
+
+          # Create pyproject.toml
+          cat > /home/jupyter/notebooks/pyproject.toml << 'PROJEOF'
+          [project]
+          name = "rds-pg"
+          version = "0.6.0"
+          description = "PostgreSQL RDS CloudFormation template with SQL notebook"
+          requires-python = ">=3.13"
+          dependencies = [
+              "jupyterlab>=4.4.3",
+              "jupysql>=0.10.17",
+              "psycopg2-binary>=2.9.11",
+              "python-dotenv>=1.2.1",
+              "toml>=0.10.2",
+              "jupyterlab-sql-explorer>=0.2.1",
+          ]
+          PROJEOF
+
+          # Create sample notebook
+          cat > /home/jupyter/notebooks/getting_started.ipynb << 'NBEOF'
+          {
+           "cells": [
+            {
+             "cell_type": "markdown",
+             "metadata": {},
+             "source": ["# SQL Practice - Getting Started\n", "\n", "This notebook is pre-configured to connect to your RDS PostgreSQL database."]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": null,
+             "metadata": {},
+             "outputs": [],
+             "source": ["# Load environment and connect\n", "import warnings\n", "warnings.filterwarnings('ignore', category=SyntaxWarning)\n", "\n", "import os\n", "from urllib.parse import quote_plus\n", "from dotenv import load_dotenv\n", "\n", "load_dotenv()\n", "\n", "DB_HOST = os.getenv('DB_HOST')\n", "DB_PORT = os.getenv('DB_PORT', '5432')\n", "DB_USER = os.getenv('DB_USER')\n", "DB_PASSWORD = quote_plus(os.getenv('DB_PASSWORD'))\n", "DB_NAME = os.getenv('DB_NAME')\n", "\n", "os.environ['DATABASE_URL'] = f'postgresql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'\n", "print(f'Connecting to: {DB_HOST}:{DB_PORT}/{DB_NAME}')"]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": null,
+             "metadata": {},
+             "outputs": [],
+             "source": ["%load_ext sql\n", "%config SqlMagic.displaylimit = 50\n", "\n", "from sqlalchemy import create_engine\n", "engine = create_engine(os.environ['DATABASE_URL'])\n", "%sql engine --alias postgres"]
+            },
+            {
+             "cell_type": "code",
+             "execution_count": null,
+             "metadata": {},
+             "outputs": [],
+             "source": ["%%sql\n", "SELECT version();"]
+            },
+            {
+             "cell_type": "markdown",
+             "metadata": {},
+             "source": ["## Ready to practice SQL!\n", "\n", "You can now write SQL queries using the `%%sql` magic command."]
+            }
+           ],
+           "metadata": {
+            "kernelspec": {
+             "display_name": "Python 3",
+             "language": "python",
+             "name": "python3"
+            }
+           },
+           "nbformat": 4,
+           "nbformat_minor": 4
+          }
+          NBEOF
+
+          # Create Jupyter config directory
+          mkdir -p /home/jupyter/.jupyter
+          cat > /home/jupyter/.jupyter/jupyter_lab_config.py << 'CONFEOF'
+          c.ServerApp.ip = '0.0.0.0'
+          c.ServerApp.port = 8888
+          c.ServerApp.open_browser = False
+          c.ServerApp.token = '${JupyterToken}'
+          c.ServerApp.notebook_dir = '/home/jupyter/notebooks'
+          c.ServerApp.allow_remote_access = True
+          CONFEOF
+
+          # Create SQL Explorer config with RDS credentials
+          mkdir -p /home/jupyter/work/.database
+          cat > /home/jupyter/work/.database/db_conf.json << 'SQLEOF'
+          {
+              "rds": {
+                  "name": "rds",
+                  "db_type": "2",
+                  "db_id": "rds",
+                  "db_host": "${PostgreSQLDB.Endpoint.Address}",
+                  "db_port": "${PostgreSQLDB.Endpoint.Port}",
+                  "db_user": "${DBUsername}",
+                  "db_pass": "${DBPassword}",
+                  "db_name": "mydb"
+              }
+          }
+          SQLEOF
+
+          # Set ownership BEFORE installing uv and dependencies
+          chown -R jupyter:jupyter /home/jupyter
+
+          # Install uv and dependencies as jupyter user (avoids permission issues)
+          su - jupyter -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
+          su - jupyter -c 'cd /home/jupyter/notebooks && /home/jupyter/.local/bin/uv sync'
+
+          # Create systemd service for Jupyter using uv run
+          cat > /etc/systemd/system/jupyter.service << 'SVCEOF'
+          [Unit]
+          Description=Jupyter Lab
+          After=network.target
+
+          [Service]
+          Type=simple
+          User=jupyter
+          WorkingDirectory=/home/jupyter/notebooks
+          Environment="PATH=/home/jupyter/.local/bin:/usr/local/bin:/usr/bin:/bin"
+          ExecStart=/home/jupyter/.local/bin/uv run jupyter lab
+          Restart=always
+          RestartSec=10
+
+          [Install]
+          WantedBy=multi-user.target
+          SVCEOF
+
+          # Start Jupyter
+          systemctl daemon-reload
+          systemctl enable jupyter
+          systemctl start jupyter
+
+          # Signal completion
+          echo "Jupyter setup complete" > /home/jupyter/setup-complete.txt
+
 Outputs:
   DBEndpoint:
     Description: PostgreSQL RDS endpoint
     Value: !GetAtt PostgreSQLDB.Endpoint.Address
     Export:
       Name: !Sub '${AWS::StackName}-db-endpoint'
-  
+
   DBPort:
     Description: PostgreSQL RDS port
     Value: !GetAtt PostgreSQLDB.Endpoint.Port
+
+  JupyterPublicIP:
+    Description: Jupyter EC2 public IP address
+    Value: !GetAtt JupyterInstance.PublicIp
+    Export:
+      Name: !Sub '${AWS::StackName}-jupyter-ip'
+
+  JupyterURL:
+    Description: Jupyter Lab URL (use your JupyterToken to login)
+    Value: !Sub 'http://${JupyterInstance.PublicIp}:8888'
+
+  SSHCommand:
+    Description: SSH command to connect to the Jupyter instance
+    Value: !Sub 'ssh -i ~/.ssh/${KeyPairName}.pem ubuntu@${JupyterInstance.PublicIp}'
+
+  UploadNotebookCommand:
+    Description: SCP command to upload notebooks to the instance
+    Value: !Sub 'scp -i ~/.ssh/${KeyPairName}.pem your_notebook.ipynb ubuntu@${JupyterInstance.PublicIp}:/home/jupyter/notebooks/'
+
+  EnvFileLocation:
+    Description: Location of the .env file on the EC2 instance
+    Value: /home/jupyter/notebooks/.env
