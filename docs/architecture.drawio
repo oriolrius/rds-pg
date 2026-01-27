@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" modified="2026-01-27T18:00:00.000Z" agent="Claude" version="24.7.17">
   <diagram id="aws-arch-1" name="AWS Architecture">
-    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0" background="#FFFFFF">
       <root>
         <mxCell id="0"/>
         <mxCell id="1" parent="0"/>
@@ -11,12 +11,12 @@
         </mxCell>
 
         <!-- User/Student Icon -->
-        <mxCell id="user" value="Student / User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#232F3E;strokeColor=#232F3E;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="user" value="Student / User" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fillColor=#232F3E;strokeColor=#232F3E;fontSize=12;fontStyle=1;fontColor=#232F3E;" vertex="1" parent="1">
           <mxGeometry x="80" y="320" width="40" height="60" as="geometry"/>
         </mxCell>
 
         <!-- Internet Cloud -->
-        <mxCell id="internet" value="Internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+        <mxCell id="internet" value="Internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#666666;fontSize=14;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
           <mxGeometry x="180" y="300" width="120" height="80" as="geometry"/>
         </mxCell>
 
