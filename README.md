@@ -21,12 +21,13 @@ This CloudFormation template deploys a PostgreSQL RDS instance with all required
 ### Create the Stack
 
 ```bash
-aws cloudformation create-stack \
+source .env && aws cloudformation create-stack \
   --stack-name my-postgres-stack \
   --template-body file://rds-postgresql.yaml \
   --parameters \
-    ParameterKey=DBUsername,ParameterValue=postgres \
-    ParameterKey=DBPassword,ParameterValue=YourSecurePassword123
+    ParameterKey=DBUsername,ParameterValue=$DB_USER \
+    ParameterKey=DBPassword,ParameterValue=$DB_PASSWORD \
+    ParameterKey=MyIP,ParameterValue=$MY_IP
 ```
 
 ### Wait for Stack Creation
@@ -82,6 +83,7 @@ aws cloudformation wait stack-delete-complete \
 Create a `.env` file:
 
 ```
+MY_IP=203.0.113.50
 DB_HOST=<DBEndpoint>
 DB_PORT=5432
 DB_USER=postgres
@@ -101,6 +103,7 @@ Then run:
 |-----------|---------|-------------|
 | DBUsername | postgres | Master database username |
 | DBPassword | (required) | Master password (min 8 characters) |
+| MyIP | (required) | Your IP address for database access |
 
 ## Database Specifications
 

@@ -13,6 +13,10 @@ Parameters:
     MinLength: 8
     Description: Database master password
 
+  MyIP:
+    Type: String
+    Description: Your IP address for database access
+
 Resources:
   DBSubnetGroup:
     Type: AWS::RDS::DBSubnetGroup
@@ -32,6 +36,10 @@ Resources:
           FromPort: 5432
           ToPort: 5432
           SourceSecurityGroupId: !Ref AppSecurityGroup
+        - IpProtocol: tcp
+          FromPort: 5432
+          ToPort: 5432
+          CidrIp: !Sub '${MyIP}/32'
 
   PostgreSQLDB:
     Type: AWS::RDS::DBInstance
