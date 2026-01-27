@@ -24,7 +24,7 @@ This CloudFormation template deploys a PostgreSQL RDS instance with all required
 ```bash
 source .env && aws cloudformation create-stack \
   --stack-name my-postgres-stack \
-  --template-body file://rds-postgresql.yaml \
+  --template-body file://cloudformation/rds-postgresql.yaml \
   --parameters \
     ParameterKey=DBUsername,ParameterValue=$DB_USER \
     ParameterKey=DBPassword,ParameterValue=$DB_PASSWORD \
