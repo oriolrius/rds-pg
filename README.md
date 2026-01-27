@@ -115,6 +115,36 @@ Students can write SQL directly using `%%sql` magic:
 SELECT * FROM users WHERE city = 'Barcelona';
 ```
 
+### SQL Explorer Setup
+
+The JupyterLab SQL Explorer extension requires a separate config file. Create it from your `.env`:
+
+```bash
+mkdir -p ~/work/.database
+cat > ~/work/.database/db_conf.json << EOF
+{
+    "rds": {
+        "name": "rds",
+        "db_type": "2",
+        "db_id": "rds",
+        "db_host": "$DB_HOST",
+        "db_port": "$DB_PORT",
+        "db_user": "$DB_USER",
+        "db_pass": "$DB_PASSWORD",
+        "db_name": "$DB_NAME"
+    }
+}
+EOF
+```
+
+Or run this one-liner after sourcing `.env`:
+
+```bash
+source .env && mkdir -p ~/work/.database && echo "{\"rds\":{\"name\":\"rds\",\"db_type\":\"2\",\"db_id\":\"rds\",\"db_host\":\"$DB_HOST\",\"db_port\":\"$DB_PORT\",\"db_user\":\"$DB_USER\",\"db_pass\":\"$DB_PASSWORD\",\"db_name\":\"$DB_NAME\"}}" > ~/work/.database/db_conf.json
+```
+
+**Note:** `db_type` values: `1`=MySQL, `2`=PostgreSQL, `3`=Oracle, `6`=SQLite
+
 ## Configuration
 
 | Parameter | Default | Description |
