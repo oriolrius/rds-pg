@@ -15,13 +15,26 @@ This CloudFormation template deploys a PostgreSQL RDS instance with a pre-config
   - jupysql for SQL magic commands
   - jupyterlab-sql-explorer extension
 
+## Project Structure
+
+```
+rds-pg/
+├── cloudformation/
+│   └── rds-postgresql.yaml   # CloudFormation template (VPC, RDS, EC2)
+├── sql_practice.ipynb        # Sample SQL practice notebook
+├── connect.sh                # Docker-based psql connection script
+├── pyproject.toml            # Python dependencies (uv)
+├── .python-version           # Python version (3.13)
+└── README.md
+```
+
 ## Prerequisites
 
 - AWS CLI configured with appropriate credentials
 - IAM permissions to create VPC, RDS, EC2, and IAM resources
 - EC2 Key Pair for SSH access
-- Docker (for connect.sh, optional)
 - [uv](https://docs.astral.sh/uv/) (for local notebook development)
+- Docker (optional, for `connect.sh`)
 
 ## Usage
 
@@ -140,20 +153,36 @@ ssh -i ~/.ssh/your-keypair.pem ubuntu@<JupyterPublicIP> \
 ssh -i ~/.ssh/your-keypair.pem ubuntu@<JupyterPublicIP> "sudo systemctl status jupyter"
 ```
 
-## Connecting to the Database
+## Local Development
 
-Create a `.env` file (get your IP from `curl -s https://ip.joor.net`):
+For running notebooks locally (instead of on EC2):
 
-```
-MY_IP=X.X.X.X
-DB_HOST=<DBEndpoint>
+### Setup
+
+Create a `.env` file with your RDS credentials:
+
+```bash
+# Get your IP
+curl -s ifconfig.me
+
+# Create .env (replace values)
+cat > .env << EOF
+DB_HOST=<DBEndpoint from stack outputs>
 DB_PORT=5432
 DB_USER=postgres
 DB_PASSWORD=YourSecurePassword123
 DB_NAME=mydb
+EOF
 ```
 
-Then run:
+### Run Jupyter Locally
+
+```bash
+uv sync
+uv run jupyter lab sql_practice.ipynb
+```
+
+### Connect via psql (Docker)
 
 ```bash
 ./connect.sh
@@ -161,13 +190,7 @@ Then run:
 
 ## SQL Practice Notebook
 
-Interactive Jupyter notebook for SQL practice:
-
-```bash
-uv run jupyter lab --ip 0.0.0.0 --port 47500 sql_practice.ipynb
-```
-
-Opens at http://localhost:47500
+The `sql_practice.ipynb` notebook demonstrates SQL queries using jupysql magic commands.
 
 Students can write SQL directly using `%%sql` magic:
 
