@@ -55,6 +55,11 @@
           <mxGeometry x="730" y="280" width="250" height="200" as="geometry"/>
         </mxCell>
 
+        <!-- AZ2 Note -->
+        <mxCell id="az2-note" value="(Available for&#xa;scaling)" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="800" y="370" width="100" height="40" as="geometry"/>
+        </mxCell>
+
         <!-- Private Subnet 1 -->
         <mxCell id="priv-subnet1" value="Private Subnet&#xa;10.0.1.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#922B21;fontColor=#922B21;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;" vertex="1" parent="1">
           <mxGeometry x="420" y="500" width="250" height="200" as="geometry"/>
@@ -145,16 +150,16 @@
           <mxGeometry x="40" y="520" width="250" height="200" as="geometry"/>
         </mxCell>
 
-        <mxCell id="leg1" value="Public Subnet" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#1E8449;fontSize=10;" vertex="1" parent="1">
+        <mxCell id="leg1" value="Public Subnet" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#1E8449;fontSize=10;fontColor=#1E8449;" vertex="1" parent="1">
           <mxGeometry x="60" y="550" width="90" height="25" as="geometry"/>
         </mxCell>
-        <mxCell id="leg2" value="Private Subnet" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#922B21;fontSize=10;" vertex="1" parent="1">
+        <mxCell id="leg2" value="Private Subnet" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#922B21;fontSize=10;fontColor=#922B21;" vertex="1" parent="1">
           <mxGeometry x="160" y="550" width="90" height="25" as="geometry"/>
         </mxCell>
-        <mxCell id="leg3" value="Security Group" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D35400;strokeWidth=2;dashed=1;fontSize=10;" vertex="1" parent="1">
+        <mxCell id="leg3" value="Security Group" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#D35400;strokeWidth=2;dashed=1;fontSize=10;fontColor=#D35400;" vertex="1" parent="1">
           <mxGeometry x="60" y="585" width="90" height="25" as="geometry"/>
         </mxCell>
-        <mxCell id="leg4" value="DB Subnet Group" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#3B48CC;strokeWidth=2;dashed=1;fontSize=10;" vertex="1" parent="1">
+        <mxCell id="leg4" value="DB Subnet Group" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B48CC;strokeWidth=2;dashed=1;fontSize=10;fontColor=#3B48CC;" vertex="1" parent="1">
           <mxGeometry x="160" y="585" width="100" height="25" as="geometry"/>
         </mxCell>
 
