@@ -82,7 +82,7 @@
 
         <!-- RDS Instance -->
         <mxCell id="rds" value="RDS PostgreSQL&#xa;db.t3.micro&#xa;Port 5432" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#3B48CC;strokeColor=#232F3E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="595" y="560" width="120" height="100" as="geometry"/>
+          <mxGeometry x="485" y="560" width="120" height="100" as="geometry"/>
         </mxCell>
 
         <!-- DB Subnet Group visual -->
@@ -92,7 +92,7 @@
 
         <!-- RDS Security Group -->
         <mxCell id="rds-sg" value="SG: Database&#xa;:5432 ← Your IP, EC2" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B48CC;strokeWidth=2;dashed=1;fontColor=#3B48CC;fontSize=10;fontStyle=0;" vertex="1" parent="1">
-          <mxGeometry x="575" y="665" width="160" height="30" as="geometry"/>
+          <mxGeometry x="465" y="665" width="160" height="30" as="geometry"/>
         </mxCell>
 
         <!-- Connectors -->
@@ -121,15 +121,11 @@
         </mxCell>
 
         <!-- EC2 to RDS -->
-        <mxCell id="conn4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#3B48CC;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="ec2" target="rds">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="545" y="610"/>
-            </Array>
-          </mxGeometry>
+        <mxCell id="conn4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#3B48CC;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="ec2" target="rds">
+          <mxGeometry relative="1" as="geometry"/>
         </mxCell>
         <mxCell id="conn4-label" value=":5432" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#3B48CC;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="550" y="590" width="40" height="20" as="geometry"/>
+          <mxGeometry x="550" y="510" width="40" height="20" as="geometry"/>
         </mxCell>
 
         <!-- User direct to RDS (via IGW) -->
