@@ -1,13 +1,11 @@
 [project]
 name = "rds-pg"
-version = "0.3.0"
-description = "PostgreSQL RDS CloudFormation template with demo notebook"
+version = "0.4.0"
+description = "PostgreSQL RDS CloudFormation template with SQL notebook"
 requires-python = ">=3.13"
 dependencies = [
-    "duckdb>=1.4.4",
-    "marimo>=0.19.6",
-    "polars[pyarrow]>=1.37.1",
+    "jupyterlab>=4.4.3",
+    "jupysql>=0.10.17",
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.1",
 ]
-

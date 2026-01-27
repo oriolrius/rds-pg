@@ -98,15 +98,22 @@ Then run:
 ./connect.sh
 ```
 
-## Demo Notebook
+## SQL Practice Notebook
 
-Interactive notebook with PostgreSQL examples:
+Interactive Jupyter notebook for SQL practice:
 
 ```bash
-uv run marimo edit --host 0.0.0.0 --port 47500 demo.py
+uv run jupyter lab --ip 0.0.0.0 --port 47500 sql_practice.ipynb
 ```
 
 Opens at http://localhost:47500
+
+Students can write SQL directly using `%%sql` magic:
+
+```sql
+%%sql
+SELECT * FROM users WHERE city = 'Barcelona';
+```
 
 ## Configuration
 
