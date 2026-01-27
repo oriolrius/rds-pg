@@ -2,6 +2,32 @@
 
 This CloudFormation template deploys a PostgreSQL RDS instance with a pre-configured Jupyter EC2 instance for SQL practice.
 
+## Architecture
+
+![AWS Architecture](docs/architecture.png)
+
+### Architecture Overview
+
+The stack creates a complete AWS environment for SQL learning:
+
+1. **Network Layer**: A VPC with public and private subnets across 2 Availability Zones provides network isolation and high availability for the database.
+
+2. **Compute Layer**: An EC2 instance (t3a.micro) running Ubuntu 24.04 with JupyterLab is deployed in a public subnet, accessible via SSH (port 22) and web browser (port 8888).
+
+3. **Database Layer**: RDS PostgreSQL (db.t3.micro) runs in private subnets within a DB Subnet Group, accessible only from the EC2 instance and your IP address.
+
+4. **Security**: Security groups restrict access:
+   - **Jupyter SG**: Allows SSH and Jupyter access only from your IP
+   - **Database SG**: Allows PostgreSQL connections from EC2 and your IP
+
+### Data Flow
+
+1. **Student/User** connects through the **Internet** to the **Internet Gateway**
+2. Traffic routes to either:
+   - **EC2 (JupyterLab)** on ports 22/8888 for notebook access
+   - **RDS PostgreSQL** on port 5432 for direct database access (optional)
+3. **EC2 → RDS**: The Jupyter instance connects to PostgreSQL on port 5432 within the VPC
+
 ## What Gets Created
 
 - **VPC** with CIDR `10.0.0.0/16`
@@ -21,6 +47,9 @@ This CloudFormation template deploys a PostgreSQL RDS instance with a pre-config
 rds-pg/
 ├── cloudformation/
 │   └── rds-postgresql.yaml   # CloudFormation template (VPC, RDS, EC2)
+├── docs/
+│   ├── architecture.drawio   # Architecture diagram (editable)
+│   └── architecture.png      # Architecture diagram (image)
 ├── sql_practice.ipynb        # Sample SQL practice notebook
 ├── connect.sh                # Docker-based psql connection script
 ├── pyproject.toml            # Python dependencies (uv)
