@@ -17,7 +17,7 @@
                     <mxGeometry x="340" y="80" width="720" height="700" as="geometry"/>
                 </mxCell>
                 <mxCell id="vpc" value="VPC (10.0.0.0/16)" style="rounded=1;arcSize=5;whiteSpace=wrap;html=1;fillColor=#E7F3E7;strokeColor=#248814;strokeWidth=2;fontColor=#248814;fontSize=14;fontStyle=1;verticalAlign=top;spacingTop=10;align=left;spacingLeft=15;" parent="1" vertex="1">
-                    <mxGeometry x="380" y="130" width="640" height="620" as="geometry"/>
+                    <mxGeometry x="380" y="120" width="640" height="630" as="geometry"/>
                 </mxCell>
                 <mxCell id="igw" value="Internet&#10;Gateway" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#232F3E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" parent="1" vertex="1">
                     <mxGeometry x="400" y="160" width="80" height="60" as="geometry"/>
@@ -28,19 +28,19 @@
                 <mxCell id="az2" value="Availability Zone 2" style="rounded=1;arcSize=5;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#147EBA;strokeWidth=1;dashed=1;fontColor=#147EBA;fontSize=12;fontStyle=1;verticalAlign=top;spacingTop=8;align=left;spacingLeft=10;" parent="1" vertex="1">
                     <mxGeometry x="710" y="240" width="290" height="480" as="geometry"/>
                 </mxCell>
-                <mxCell id="pub-subnet1" value="Public Subnet&#10;10.0.3.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#1E8449;fontColor=#1E8449;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+                <mxCell id="pub-subnet1" value="Public Subnet&#10;10.0.3.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#1E8449;fontColor=#1E8449;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;align=right;" parent="1" vertex="1">
                     <mxGeometry x="420" y="280" width="250" height="200" as="geometry"/>
                 </mxCell>
-                <mxCell id="pub-subnet2" value="Public Subnet&#10;10.0.4.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#1E8449;fontColor=#1E8449;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+                <mxCell id="pub-subnet2" value="Public Subnet&#10;10.0.4.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#D5F5E3;strokeColor=#1E8449;fontColor=#1E8449;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;align=right;" parent="1" vertex="1">
                     <mxGeometry x="730" y="280" width="250" height="200" as="geometry"/>
                 </mxCell>
                 <mxCell id="az2-note" value="(Available for&#10;scaling)" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#666666;fontStyle=2;" parent="1" vertex="1">
                     <mxGeometry x="800" y="370" width="100" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="priv-subnet1" value="Private Subnet&#10;10.0.1.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#922B21;fontColor=#922B21;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+                <mxCell id="priv-subnet1" value="Private Subnet&#10;10.0.1.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#922B21;fontColor=#922B21;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;align=right;" parent="1" vertex="1">
                     <mxGeometry x="420" y="500" width="250" height="200" as="geometry"/>
                 </mxCell>
-                <mxCell id="priv-subnet2" value="Private Subnet&#10;10.0.2.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#922B21;fontColor=#922B21;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;" parent="1" vertex="1">
+                <mxCell id="priv-subnet2" value="Private Subnet&#10;10.0.2.0/24" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FADBD8;strokeColor=#922B21;fontColor=#922B21;fontSize=11;fontStyle=1;verticalAlign=top;spacingTop=8;align=right;" parent="1" vertex="1">
                     <mxGeometry x="730" y="500" width="250" height="200" as="geometry"/>
                 </mxCell>
                 <mxCell id="ec2" value="EC2 t3a.micro&#10;Ubuntu 24.04&#10;JupyterLab" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FF9900;strokeColor=#232F3E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" parent="1" vertex="1">
@@ -52,7 +52,7 @@
                 <mxCell id="rds" value="RDS PostgreSQL&#10;db.t3.micro&#10;Port 5432" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#3B48CC;strokeColor=#232F3E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;" parent="1" vertex="1">
                     <mxGeometry x="485" y="560" width="120" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="db-subnet-group" value="DB Subnet Group" style="rounded=1;arcSize=5;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#3B48CC;strokeWidth=2;dashed=1;fontColor=#3B48CC;fontSize=11;fontStyle=1;verticalAlign=bottom;spacingBottom=5;" parent="1" vertex="1">
+                <mxCell id="db-subnet-group" value="DB Subnet Group" style="rounded=1;arcSize=5;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#3B48CC;strokeWidth=2;dashed=1;fontColor=#3B48CC;fontSize=11;fontStyle=1;verticalAlign=bottom;spacingBottom=5;align=right;" parent="1" vertex="1">
                     <mxGeometry x="440" y="540" width="520" height="140" as="geometry"/>
                 </mxCell>
                 <mxCell id="rds-sg" value="SG: Database&#10;:5432 ← Your IP, EC2" style="rounded=1;arcSize=8;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#3B48CC;strokeWidth=2;dashed=1;fontColor=#3B48CC;fontSize=10;fontStyle=0;" parent="1" vertex="1">
@@ -73,7 +73,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="conn3-label" value="SSH :22&#10;Jupyter :8888" style="text;html=1;align=center;verticalAlign=middle;fontSize=10;fontColor=#1E8449;fontStyle=0;" parent="1" vertex="1">
-                    <mxGeometry x="450" y="305" width="80" height="30" as="geometry"/>
+                    <mxGeometry x="545" y="320" width="80" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="conn4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;curved=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#3B48CC;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ec2" target="rds" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
