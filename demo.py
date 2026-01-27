@@ -43,7 +43,7 @@ def _(config):
     cur.execute("SELECT version();")
     version = cur.fetchone()[0]
     print(f"Connected to: {version}")
-    
+
     return conn, cur
 
 
@@ -128,9 +128,9 @@ def _(cur, mo):
 @app.cell
 def _(mo):
     mo.md("""
-    ## SQL Cells with Polars
+    ## SQL with Polars + DuckDB
 
-    Load PostgreSQL data into a Polars dataframe, then use SQL cells to query it via DuckDB.
+    Load PostgreSQL data into a Polars dataframe, then query it with DuckDB SQL.
     """)
     return
 
@@ -138,6 +138,7 @@ def _(mo):
 @app.cell
 def _(conn):
     import polars as pl
+    import duckdb
 
     # Load PostgreSQL table into Polars dataframe
     users_df = pl.read_database(
@@ -145,34 +146,32 @@ def _(conn):
         connection=conn
     )
     users_df
-    return pl, users_df
+    return duckdb, pl, users_df
 
 
 @app.cell
-def _(mo, users_df):
-    # Now you can use SQL cells on the dataframe
-    result = mo.sql(
-        """
+def _(duckdb, users_df):
+    # Query the dataframe with DuckDB SQL
+    result = duckdb.sql("""
         SELECT name, email
         FROM users_df
         WHERE name LIKE '%Smith%'
-        """
-    )
+    """).pl()
+    result
     return result,
 
 
 @app.cell
-def _(mo, users_df):
-    # Another SQL example - aggregation
-    stats = mo.sql(
-        """
+def _(duckdb, users_df):
+    # Aggregation example
+    stats = duckdb.sql("""
         SELECT
             COUNT(*) as total_users,
             MIN(created_at) as first_user,
             MAX(created_at) as last_user
         FROM users_df
-        """
-    )
+    """).pl()
+    stats
     return stats,
 
 
