@@ -8,4 +8,5 @@ dependencies = [
     "jupysql>=0.10.17",
     "psycopg2-binary>=2.9.11",
     "python-dotenv>=1.2.1",
+    "toml>=0.10.2",
 ]
