@@ -1,0 +1,16 @@
+[project]
+name = "rds-pg"
+version = "0.2.0"
+description = "PostgreSQL RDS CloudFormation template with demo notebook"
+requires-python = ">=3.13"
+dependencies = [
+    "marimo>=0.19.6",
+    "psycopg2-binary>=2.9.11",
+    "python-dotenv>=1.2.1",
+]
+
+[project.scripts]
+demo = "marimo:cli"
+
+[tool.uv.scripts]
+notebook = "marimo edit --host 0.0.0.0 --port 47500 demo.py"

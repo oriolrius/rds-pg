@@ -15,6 +15,7 @@ This CloudFormation template deploys a PostgreSQL RDS instance with all required
 - AWS CLI configured with appropriate credentials
 - IAM permissions to create VPC, RDS, and EC2 resources
 - Docker (for connect.sh)
+- [uv](https://docs.astral.sh/uv/) (for demo notebook)
 
 ## Usage
 
@@ -96,6 +97,16 @@ Then run:
 ```bash
 ./connect.sh
 ```
+
+## Demo Notebook
+
+Interactive notebook with PostgreSQL examples:
+
+```bash
+uv run notebook
+```
+
+Opens at http://localhost:47500
 
 ## Configuration
 
