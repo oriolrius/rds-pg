@@ -29,7 +29,7 @@ def _():
     - User: `{config['user']}`
     - Database: `{config['dbname']}`
     """)
-    return config, load_dotenv, mo, os
+    return config, mo
 
 
 @app.cell
@@ -43,7 +43,19 @@ def _(config):
     cur.execute("SELECT version();")
     version = cur.fetchone()[0]
     print(f"Connected to: {version}")
-    return conn, cur, psycopg2, version
+    
+    return conn, cur
+
+
+@app.cell
+def _(cur):
+    # show available databases
+    cur.execute("SELECT datname FROM pg_database;")
+    databases = cur.fetchall()
+    print("Available databases:")
+    for db in databases:
+        print(f"- {db[0]}")
+    return
 
 
 @app.cell
@@ -86,7 +98,7 @@ def _(cur, mo):
 
     table_data = [{"id": r[0], "name": r[1], "email": r[2], "created_at": str(r[3])} for r in rows]
     mo.md("## Users Table")
-    return rows, table_data
+    return (table_data,)
 
 
 @app.cell
@@ -110,7 +122,7 @@ def _(cur, mo):
     updated_rows = cur.fetchall()
     updated_data = [{"id": r[0], "name": r[1], "email": r[2], "created_at": str(r[3])} for r in updated_rows]
     mo.ui.table(updated_data)
-    return updated_data, updated_rows
+    return
 
 
 @app.cell
@@ -124,10 +136,9 @@ def _(mo):
 
 
 @app.cell
-def _(cur, mo):
-    # Uncomment to cleanup
-    # cur.execute("DROP TABLE IF EXISTS users;")
-    mo.md("*Uncomment the line above to drop the table.*")
+def _(cur):
+    # Cleanup users' table
+    cur.execute("DROP TABLE IF EXISTS users;")
     return
 
 
