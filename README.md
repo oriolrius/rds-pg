@@ -13,7 +13,8 @@ This CloudFormation template deploys a PostgreSQL RDS instance with all required
 ## Prerequisites
 
 - AWS CLI configured with appropriate credentials
-- Sufficient IAM permissions to create VPC, RDS, and EC2 resources
+- IAM permissions to create VPC, RDS, and EC2 resources
+- Docker (for connect.sh)
 
 ## Usage
 
@@ -78,13 +79,21 @@ aws cloudformation wait stack-delete-complete \
 
 ## Connecting to the Database
 
-Once the stack is created, connect using:
+Create a `.env` file:
 
-```bash
-psql -h <DBEndpoint> -U postgres -d mydb
+```
+DB_HOST=<DBEndpoint>
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=YourSecurePassword123
+DB_NAME=mydb
 ```
 
-Note: Your client must be in a security group that is allowed by the `AppSecurityGroup`, or you need to modify the `DatabaseSecurityGroup` to allow your IP address.
+Then run:
+
+```bash
+./connect.sh
+```
 
 ## Configuration
 
