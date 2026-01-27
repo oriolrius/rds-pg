@@ -246,7 +246,7 @@ Resources:
           cat > /home/jupyter/notebooks/pyproject.toml << 'PROJEOF'
           [project]
           name = "rds-pg"
-          version = "0.6.2"
+          version = "0.6.3"
           description = "PostgreSQL RDS CloudFormation template with SQL notebook"
           requires-python = ">=3.13"
           dependencies = [
