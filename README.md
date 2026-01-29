@@ -46,14 +46,17 @@ The stack creates a complete AWS environment for SQL learning:
 ```
 rds-pg/
 ├── cloudformation/
-│   └── rds-postgresql.yaml   # CloudFormation template (VPC, RDS, EC2)
+│   └── rds-postgresql.yaml      # CloudFormation template (VPC, RDS, EC2)
 ├── docs/
-│   ├── architecture.drawio   # Architecture diagram (editable)
-│   └── architecture.png      # Architecture diagram (image)
-├── sql_practice.ipynb        # Sample SQL practice notebook
-├── connect.sh                # Docker-based psql connection script
-├── pyproject.toml            # Python dependencies (uv)
-├── .python-version           # Python version (3.13)
+│   ├── architecture.drawio      # Architecture diagram (editable)
+│   ├── architecture.png         # Architecture diagram (image)
+│   └── permissions.md           # AWS IAM permissions guide
+├── sql_practice.ipynb           # Basic SQL practice notebook
+├── sql_advanced_practice.ipynb  # Advanced SQL: JOINs, CTEs, Triggers
+├── connect.sh                   # Docker-based psql connection script
+├── pyproject.toml               # Python dependencies (uv)
+├── .python-version              # Python version (3.13)
+├── LICENSE                      # CC BY-SA 4.0 license
 └── README.md
 ```
 
