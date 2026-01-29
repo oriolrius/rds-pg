@@ -307,6 +307,51 @@ Resources:
           }
           NBEOF
 
+          # Create welcome README
+          cat > /home/jupyter/notebooks/README.md << 'READMEEOF'
+          # SQL Practice Notebooks
+
+          Welcome to the SQL Practice environment! This JupyterLab instance is connected to a PostgreSQL database on AWS RDS.
+
+          ---
+
+          ## Available Notebooks
+
+          ### 1. [Getting Started](./getting_started.ipynb)
+          **Level:** Beginner | **Duration:** 5 minutes
+
+          Quick setup to verify your database connection. Run this first to ensure everything is working.
+
+          ---
+
+          ### 2. [SQL Practice](./sql_practice.ipynb)
+          **Level:** Beginner to Intermediate | **Duration:** 30-45 minutes
+
+          Learn fundamental SQL concepts: CREATE, INSERT, SELECT, WHERE, ORDER BY, GROUP BY, aggregate functions.
+
+          ---
+
+          ### 3. [Advanced SQL Practice](./sql_advanced_practice.ipynb)
+          **Level:** Intermediate to Advanced | **Duration:** 60-90 minutes
+
+          Master advanced SQL: JOINs, subqueries, CTEs, window functions, triggers, and transactions.
+
+          ---
+
+          ### 4. [Sales Report](./sales_report.ipynb)
+          **Level:** Advanced | **Duration:** 30 minutes
+
+          Business analytics with SQL and Python visualization: KPIs, charts, customer segmentation, trends.
+
+          ---
+
+          ## Quick Tips
+
+          - **Run cells:** `Shift + Enter`
+          - **SQL queries:** Use `%%sql` magic command
+          - **View tables:** Check the SQL Explorer in the left sidebar
+          READMEEOF
+
           # Create Jupyter config directory
           mkdir -p /home/jupyter/.jupyter
           cat > /home/jupyter/.jupyter/jupyter_lab_config.py << 'CONFEOF'
