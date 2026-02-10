@@ -108,11 +108,17 @@ aws cloudformation create-stack \
     ParameterKey=DBUsername,ParameterValue=postgres \
     ParameterKey=DBPassword,ParameterValue=YourSecurePassword123 \
     ParameterKey=MyIP,ParameterValue=$MY_IP \
-    ParameterKey=KeyPairName,ParameterValue=your-keypair-name \
-    ParameterKey=JupyterToken,ParameterValue=your-jupyter-token \
+    ParameterKey=KeyPairName,ParameterValue=my-jupyter-key \
   --capabilities CAPABILITY_IAM \
   --region eu-west-1
 ```
+
+**Required parameters you must customize:**
+- `DBPassword`: Choose a secure password (min 8 characters)
+- `KeyPairName`: Your EC2 key pair name (see [Create an EC2 Key Pair](#create-an-ec2-key-pair))
+
+**Optional parameters:**
+- `JupyterToken`: Password for Jupyter web access (default: `jupyter-sql-practice`)
 
 ### Wait for Stack Creation
 
