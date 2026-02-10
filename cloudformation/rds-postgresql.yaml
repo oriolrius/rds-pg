@@ -201,7 +201,7 @@ Resources:
     DependsOn: PostgreSQLDB
     Properties:
       InstanceType: t3a.micro
-      ImageId: !Sub '{{resolve:ssm:/aws/service/canonical/ubuntu/server/24.04/stable/current/amd64/hvm/ebs-gp3/ami-id}}'
+      ImageId: !Sub 'ami-092b91d47c6c8baa5'
       KeyName: !Ref KeyPairName
       IamInstanceProfile: !Ref JupyterInstanceProfile
       SubnetId: !Ref PublicSubnet1

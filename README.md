@@ -64,9 +64,33 @@ rds-pg/
 
 - AWS CLI configured with appropriate credentials
 - IAM permissions to create VPC, RDS, EC2, and IAM resources
-- EC2 Key Pair for SSH access
+- EC2 Key Pair for SSH access (see below)
 - [uv](https://docs.astral.sh/uv/) (for local notebook development)
 - Docker (optional, for `connect.sh`)
+
+### Create an EC2 Key Pair
+
+An EC2 Key Pair is required for SSH access to the Jupyter instance. If you don't have one, create it:
+
+```bash
+# Create a new key pair and save the private key
+aws ec2 create-key-pair \
+  --key-name my-jupyter-key \
+  --region eu-west-1 \
+  --query 'KeyMaterial' \
+  --output text > ~/.ssh/my-jupyter-key.pem
+
+# Set correct permissions
+chmod 400 ~/.ssh/my-jupyter-key.pem
+```
+
+To list existing key pairs in your account:
+
+```bash
+aws ec2 describe-key-pairs --region eu-west-1 --query 'KeyPairs[*].KeyName' --output table
+```
+
+Use the key pair name (e.g., `my-jupyter-key`) in the `KeyPairName` parameter when creating the stack.
 
 ## Usage
 
