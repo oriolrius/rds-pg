@@ -307,6 +307,12 @@ Resources:
           }
           NBEOF
 
+          # Download notebooks from GitHub
+          GITHUB_RAW="https://raw.githubusercontent.com/oriolrius/rds-pg/main"
+          curl -fsSL "$GITHUB_RAW/sql_practice.ipynb" -o /home/jupyter/notebooks/sql_practice.ipynb
+          curl -fsSL "$GITHUB_RAW/sql_advanced_practice.ipynb" -o /home/jupyter/notebooks/sql_advanced_practice.ipynb
+          curl -fsSL "$GITHUB_RAW/sales_report.ipynb" -o /home/jupyter/notebooks/sales_report.ipynb
+
           # Create welcome README
           cat > /home/jupyter/notebooks/README.md << 'READMEEOF'
           # SQL Practice Notebooks
