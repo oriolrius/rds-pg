@@ -11,12 +11,10 @@ This CloudFormation template deploys a PostgreSQL RDS instance with a pre-config
 The stack creates a complete AWS environment for SQL learning:
 
 1. **Network Layer**: A VPC with public and private subnets across 2 Availability Zones provides network isolation and high availability for the database.
-
 2. **Compute Layer**: An EC2 instance (t3a.micro) running Ubuntu 24.04 with JupyterLab is deployed in a public subnet, accessible via SSH (port 22) and web browser (port 8888).
-
 3. **Database Layer**: RDS PostgreSQL (db.t3.micro) runs in private subnets within a DB Subnet Group, accessible only from the EC2 instance and your IP address.
-
 4. **Security**: Security groups restrict access:
+
    - **Jupyter SG**: Allows SSH and Jupyter access only from your IP
    - **Database SG**: Allows PostgreSQL connections from EC2 and your IP
 
@@ -114,10 +112,12 @@ aws cloudformation create-stack \
 ```
 
 **Required parameters you must customize:**
+
 - `DBPassword`: Choose a secure password (min 8 characters)
 - `KeyPairName`: Your EC2 key pair name (see [Create an EC2 Key Pair](#create-an-ec2-key-pair))
 
 **Optional parameters:**
+
 - `JupyterToken`: Password for Jupyter web access (default: `jupyter-sql-practice`)
 
 ### Wait for Stack Creation
@@ -191,7 +191,7 @@ aws cloudformation describe-stacks \
 ### Open Jupyter
 
 1. Navigate to `http://<JupyterPublicIP>:8888`
-2. Enter your `JupyterToken` when prompted
+2. Enter your `JupyterToken` when prompted; default: `jupyter-sql-practice`
 3. The `.env` file is pre-configured with RDS credentials
 4. Open `getting_started.ipynb` to begin
 
@@ -297,45 +297,45 @@ source .env && mkdir -p ~/work/.database && echo "{\"rds\":{\"name\":\"rds\",\"d
 
 ## Configuration
 
-| Parameter | Default | Description |
-|-----------|---------|-------------|
-| DBUsername | postgres | Master database username |
-| DBPassword | (required) | Master password (min 8 characters) |
-| MyIP | (required) | Your IP address for database and Jupyter access |
-| KeyPairName | (required) | EC2 Key Pair name for SSH access |
-| JupyterToken | jupyter-sql-practice | Token/password for Jupyter authentication |
+| Parameter    | Default              | Description                                     |
+| ------------ | -------------------- | ----------------------------------------------- |
+| DBUsername   | postgres             | Master database username                        |
+| DBPassword   | (required)           | Master password (min 8 characters)              |
+| MyIP         | (required)           | Your IP address for database and Jupyter access |
+| KeyPairName  | (required)           | EC2 Key Pair name for SSH access                |
+| JupyterToken | jupyter-sql-practice | Token/password for Jupyter authentication       |
 
 ## Infrastructure Specifications
 
 ### RDS Database
 
-| Property | Value |
-|----------|-------|
-| Engine | PostgreSQL 15.15 |
-| Instance Class | db.t3.micro |
-| Storage | 20GB gp2 (encrypted) |
-| Multi-AZ | No |
-| Backup Retention | 7 days |
-| Publicly Accessible | Yes |
+| Property            | Value                |
+| ------------------- | -------------------- |
+| Engine              | PostgreSQL 15.15     |
+| Instance Class      | db.t3.micro          |
+| Storage             | 20GB gp2 (encrypted) |
+| Multi-AZ            | No                   |
+| Backup Retention    | 7 days               |
+| Publicly Accessible | Yes                  |
 
 ### EC2 Jupyter Instance
 
-| Property | Value |
-|----------|-------|
-| Instance Type | t3a.micro |
-| OS | Ubuntu 24.04 LTS |
-| Python | 3.13 (via uv) |
-| Jupyter Port | 8888 |
-| SSH Port | 22 |
-| Access | Restricted to MyIP |
+| Property      | Value              |
+| ------------- | ------------------ |
+| Instance Type | t3a.micro          |
+| OS            | Ubuntu 24.04 LTS   |
+| Python        | 3.13 (via uv)      |
+| Jupyter Port  | 8888               |
+| SSH Port      | 22                 |
+| Access        | Restricted to MyIP |
 
 ### Stack Outputs
 
-| Output | Description |
-|--------|-------------|
-| DBEndpoint | RDS PostgreSQL hostname |
-| DBPort | RDS port (5432) |
-| JupyterPublicIP | EC2 public IP address |
-| JupyterURL | Full Jupyter URL |
-| SSHCommand | Ready-to-use SSH command |
+| Output                | Description               |
+| --------------------- | ------------------------- |
+| DBEndpoint            | RDS PostgreSQL hostname   |
+| DBPort                | RDS port (5432)           |
+| JupyterPublicIP       | EC2 public IP address     |
+| JupyterURL            | Full Jupyter URL          |
+| SSHCommand            | Ready-to-use SSH command  |
 | UploadNotebookCommand | SCP command for notebooks |
