@@ -1,6 +1,6 @@
 [project]
 name = "rds-pg"
-version = "0.9.0"
+version = "0.10.0"
 description = "AWS CloudFormation stack for SQL education: PostgreSQL RDS with pre-configured JupyterLab, ready for classroom deployment"
 readme = "README.md"
 license = {text = "CC-BY-SA-4.0"}
