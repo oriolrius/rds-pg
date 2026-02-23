@@ -246,7 +246,7 @@ Resources:
           cat > /home/jupyter/notebooks/pyproject.toml << 'PROJEOF'
           [project]
           name = "rds-pg"
-          version = "0.10.0"
+          version = "0.11.0"
           description = "AWS CloudFormation stack for SQL education: PostgreSQL RDS with pre-configured JupyterLab"
           requires-python = ">=3.13"
           dependencies = [
@@ -256,6 +256,9 @@ Resources:
               "python-dotenv>=1.2.1",
               "toml>=0.10.2",
               "jupyterlab-sql-explorer>=0.2.1",
+              "pandas>=2.0.0",
+              "matplotlib>=3.7.0",
+              "seaborn>=0.12.0",
           ]
           PROJEOF
 
@@ -392,6 +395,102 @@ Resources:
           # Install uv and dependencies as jupyter user (avoids permission issues)
           su - jupyter -c 'curl -LsSf https://astral.sh/uv/install.sh | sh'
           su - jupyter -c 'cd /home/jupyter/notebooks && /home/jupyter/.local/bin/uv sync'
+
+          # Initialize demo database tables
+          export PGPASSWORD='${DBPassword}'
+          psql -h ${PostgreSQLDB.Endpoint.Address} -U ${DBUsername} -d mydb << 'SQLEOF'
+          -- Create customers table
+          CREATE TABLE IF NOT EXISTS customers (
+              id SERIAL PRIMARY KEY,
+              name VARCHAR(100) NOT NULL,
+              email VARCHAR(150) UNIQUE NOT NULL,
+              city VARCHAR(50) NOT NULL,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+
+          -- Create products table
+          CREATE TABLE IF NOT EXISTS products (
+              id SERIAL PRIMARY KEY,
+              name VARCHAR(100) NOT NULL,
+              price DECIMAL(10, 2) NOT NULL,
+              category VARCHAR(50) NOT NULL,
+              stock INTEGER NOT NULL DEFAULT 0,
+              CONSTRAINT positive_price CHECK (price > 0),
+              CONSTRAINT non_negative_stock CHECK (stock >= 0)
+          );
+
+          -- Create orders table
+          CREATE TABLE IF NOT EXISTS orders (
+              id SERIAL PRIMARY KEY,
+              customer_id INTEGER NOT NULL REFERENCES customers(id),
+              product_id INTEGER NOT NULL REFERENCES products(id),
+              quantity INTEGER NOT NULL,
+              order_date DATE NOT NULL DEFAULT CURRENT_DATE,
+              status VARCHAR(20) NOT NULL DEFAULT 'pending',
+              CONSTRAINT positive_quantity CHECK (quantity > 0 AND quantity <= 100),
+              CONSTRAINT valid_status CHECK (status IN ('pending', 'processing', 'shipped', 'completed', 'cancelled'))
+          );
+
+          -- Insert customers (skip if already exist)
+          INSERT INTO customers (name, email, city) VALUES
+              ('Ana Garcia', 'ana.garcia@email.com', 'Barcelona'),
+              ('John Smith', 'john.smith@email.com', 'London'),
+              ('Marie Dupont', 'marie.dupont@email.com', 'Paris'),
+              ('Hans Mueller', 'hans.mueller@email.com', 'Berlin'),
+              ('Sofia Rossi', 'sofia.rossi@email.com', 'Milan'),
+              ('Carlos Lopez', 'carlos.lopez@email.com', 'Madrid'),
+              ('Emma Wilson', 'emma.wilson@email.com', 'London'),
+              ('Pierre Martin', 'pierre.martin@email.com', 'Paris'),
+              ('Laura Sanchez', 'laura.sanchez@email.com', 'Barcelona'),
+              ('Marco Bianchi', 'marco.bianchi@email.com', 'Milan'),
+              ('Inactive Customer', 'inactive@email.com', 'Amsterdam')
+          ON CONFLICT (email) DO NOTHING;
+
+          -- Insert products (skip if already exist)
+          INSERT INTO products (name, price, category, stock)
+          SELECT * FROM (VALUES
+              ('MacBook Pro 14"', 1999.99, 'Electronics', 25),
+              ('iPhone 15 Pro', 1199.99, 'Electronics', 50),
+              ('Samsung Galaxy S24', 899.99, 'Electronics', 40),
+              ('Sony WH-1000XM5', 349.99, 'Electronics', 100),
+              ('iPad Air', 599.99, 'Electronics', 35),
+              ('Apple AirPods Pro', 249.99, 'Accessories', 150),
+              ('Logitech MX Master 3', 99.99, 'Accessories', 200),
+              ('Samsung USB-C Hub', 49.99, 'Accessories', 300),
+              ('Anker Charger 65W', 39.99, 'Accessories', 250),
+              ('PlayStation 5', 499.99, 'Gaming', 15),
+              ('Xbox Series X', 499.99, 'Gaming', 20),
+              ('Nintendo Switch OLED', 349.99, 'Gaming', 45),
+              ('Old Product', 19.99, 'Discontinued', 0)
+          ) AS v(name, price, category, stock)
+          WHERE NOT EXISTS (SELECT 1 FROM products LIMIT 1);
+
+          -- Insert orders (skip if already exist)
+          INSERT INTO orders (customer_id, product_id, quantity, order_date, status)
+          SELECT * FROM (VALUES
+              (1, 1, 1, '2026-01-05'::DATE, 'completed'),
+              (1, 6, 2, '2026-01-10'::DATE, 'completed'),
+              (1, 4, 1, '2026-01-20'::DATE, 'shipped'),
+              (2, 2, 1, '2026-01-08'::DATE, 'completed'),
+              (2, 7, 1, '2026-01-15'::DATE, 'completed'),
+              (3, 1, 2, '2026-01-12'::DATE, 'completed'),
+              (3, 5, 1, '2026-01-18'::DATE, 'completed'),
+              (3, 6, 3, '2026-01-25'::DATE, 'processing'),
+              (4, 10, 1, '2026-01-14'::DATE, 'completed'),
+              (4, 12, 1, '2026-01-22'::DATE, 'shipped'),
+              (5, 3, 1, '2026-01-16'::DATE, 'completed'),
+              (5, 8, 2, '2026-01-24'::DATE, 'completed'),
+              (6, 11, 1, '2026-01-19'::DATE, 'completed'),
+              (7, 4, 1, '2026-01-21'::DATE, 'completed'),
+              (7, 9, 3, '2026-01-26'::DATE, 'pending'),
+              (8, 2, 1, '2026-01-23'::DATE, 'shipped'),
+              (9, 5, 1, '2026-01-27'::DATE, 'pending'),
+              (10, 1, 1, '2026-01-28'::DATE, 'processing'),
+              (10, 6, 1, '2026-01-28'::DATE, 'processing')
+          ) AS v(customer_id, product_id, quantity, order_date, status)
+          WHERE NOT EXISTS (SELECT 1 FROM orders LIMIT 1);
+          SQLEOF
+          unset PGPASSWORD
 
           # Create systemd service for Jupyter using uv run
           cat > /etc/systemd/system/jupyter.service << 'SVCEOF'
